@@ -17,6 +17,7 @@
         <th>Отправление</th>
         <th>Прибытие</th>
         <th>Подробнее</th>
+        <th>Действия</th>
     </tr>
     </thead>
 
@@ -32,6 +33,23 @@
                 <a href="/trips/{{ $trip->id }}">
                     Открыть
                 </a>
+            </td>
+            <td>
+                <a href="/trips/{{ $trip->id }}/edit">
+                    Редактировать
+                </a>
+
+                <form action="/trips/{{ $trip->id }}" method="POST" style="display:inline">
+
+                    @csrf
+                    @method('DELETE')
+
+                    <button type="submit"
+                            onclick="return confirm('Удалить этот рейс?')">
+                        Удалить
+                    </button>
+
+                </form>
             </td>
         </tr>
     @endforeach

@@ -17,6 +17,15 @@ Route::get('/routes', [RouteController::class, 'index']);
 Route::get('/routes/{id}', [RouteController::class, 'show']);
 
 Route::get('/trips', [TripController::class, 'index']);
+
+Route::get('/trips/create', [TripController::class, 'create']);
+Route::post('/trips', [TripController::class, 'store']);
+
+Route::get('/trips/{id}/edit', [TripController::class, 'edit']);
+Route::put('/trips/{id}', [TripController::class, 'update']);
+
+Route::delete('/trips/{id}', [TripController::class, 'destroy']);
+
 Route::get('/trips/{id}', [TripController::class, 'show']);
 
 Route::get('/transports/{id}', [TransportController::class, 'show']);
