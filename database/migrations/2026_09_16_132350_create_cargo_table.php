@@ -6,27 +6,24 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
-        Schema::create('cargo', function (Blueprint $table) {
+        Schema::create('cargoes', function (Blueprint $table) {
             $table->id();
 
             $table->foreignId('trip_id')
-                ->constrained('trip');
+                ->constrained('trips')
+                ->cascadeOnDelete();
 
             $table->decimal('weight_kg', 10, 2);
             $table->string('sender', 150);
+
+            $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
-        Schema::dropIfExists('cargo');
+        Schema::dropIfExists('cargoes');
     }
 };
