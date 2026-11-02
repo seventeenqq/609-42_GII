@@ -55,6 +55,38 @@
     @endforeach
     </tbody>
 </table>
+<p>
+    Показано {{ $trips->firstItem() ?? 0 }}
+    – {{ $trips->lastItem() ?? 0 }}
+    из {{ $trips->total() }} рейсов
+</p>
+
+{{ $trips->links() }}
+
+<form action="{{ url('/trips') }}"
+      method="GET"
+      style="margin-top: 20px;">
+
+    <label for="perpage">
+        Элементов на странице:
+    </label>
+
+    <select name="perpage" id="perpage">
+
+        @foreach ([3, 5, 10] as $size)
+            <option value="{{ $size }}"
+                @selected($perPage === $size)>
+                {{ $size }}
+            </option>
+        @endforeach
+
+    </select>
+
+    <button type="submit">
+        Изменить
+    </button>
+
+</form>
 
 </body>
 </html>

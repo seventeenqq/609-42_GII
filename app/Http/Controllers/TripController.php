@@ -9,14 +9,28 @@ use Illuminate\Http\Request;
 
 class TripController extends Controller
 {
-    public function index()
+
+
+    public function index(Request $request)
     {
-        $trips = Trip::with(['route', 'transport'])->get();
+        $perPage = (int) $request->query('perpage', 5);
+
+        if (!in_array($perPage, [3, 5, 10], true)) {
+            $perPage = 5;
+        }
+
+        $trips = Trip::with(['route', 'transport'])
+            ->orderBy('id')
+            ->paginate($perPage)
+            ->withQueryString();
 
         return view('trips.index', [
-            'trips' => $trips
+            'trips' => $trips,
+            'perPage' => $perPage
         ]);
     }
+
+
 
     public function show(string $id)
     {
