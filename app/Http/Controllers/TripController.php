@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Gate;
 use App\Models\Route;
 use App\Models\Transport;
 use App\Models\Trip;
@@ -64,9 +65,17 @@ class TripController extends Controller
         return redirect('/trips');
     }
 
+
     public function edit(string $id)
     {
         $trip = Trip::findOrFail($id);
+
+        if (! Gate::allows('edit-trip', $trip)) {
+            return redirect('/error')->with(
+                'message',
+                'У вас нет разрешения на редактирование рейса номер ' . $id
+            );
+        }
 
         return view('trips.edit', [
             'trip' => $trip,
@@ -75,8 +84,19 @@ class TripController extends Controller
         ]);
     }
 
+
+
     public function update(Request $request, string $id)
     {
+        $trip = Trip::findOrFail($id);
+
+        if (! Gate::allows('edit-trip', $trip)) {
+            return redirect('/error')->with(
+                'message',
+                'У вас нет разрешения на редактирование рейса номер ' . $id
+            );
+        }
+
         $validated = $request->validate([
             'route_id' => 'required|exists:routes,id',
             'transport_id' => 'required|exists:transports,id',
@@ -84,19 +104,27 @@ class TripController extends Controller
             'arrival_at' => 'required|date|after:departure_at',
         ]);
 
-        $trip = Trip::findOrFail($id);
-
         $trip->update($validated);
 
         return redirect('/trips');
     }
 
+
+
     public function destroy(string $id)
     {
         $trip = Trip::findOrFail($id);
+
+        if (! Gate::allows('delete-trip', $trip)) {
+            return redirect('/error')->with(
+                'message',
+                'У вас нет разрешения на удаление рейса номер ' . $id
+            );
+        }
 
         $trip->delete();
 
         return redirect('/trips');
     }
+
 }
