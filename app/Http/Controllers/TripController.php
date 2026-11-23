@@ -62,7 +62,8 @@ class TripController extends Controller
 
         Trip::create($validated);
 
-        return redirect('/trips');
+        return redirect('/trips')
+            ->with('success', 'Рейс успешно добавлен!');
     }
 
 
@@ -106,10 +107,9 @@ class TripController extends Controller
 
         $trip->update($validated);
 
-        return redirect('/trips');
+        return redirect('/trips')
+            ->with('success', 'Рейс успешно добавлен!');
     }
-
-
 
     public function destroy(string $id)
     {
@@ -124,7 +124,9 @@ class TripController extends Controller
 
         $trip->delete();
 
-        return redirect('/trips');
+        return redirect('/trips')
+            ->with('success', 'Рейс №' . $id . ' успешно удалён!');
     }
+
 
 }

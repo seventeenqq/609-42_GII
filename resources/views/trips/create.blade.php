@@ -1,102 +1,41 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <title>Добавление рейса</title>
+@extends('layouts.app')
 
-    <style>
-        .error {
-            color: red;
-        }
-    </style>
-</head>
-<body>
+@section('title', 'Добавить рейс')
 
-<h1>Добавление рейса</h1>
+@section('content')
 
-<form method="POST" action="/trips">
-    @csrf
+    <div class="row justify-content-center">
 
-    <div>
-        <label>Маршрут:</label>
+        <div class="col-md-8 col-lg-6">
 
-        <select name="route_id">
-            <option value="">-- Выберите маршрут --</option>
+            <div class="card shadow-sm">
 
-            @foreach($routes as $route)
-                <option value="{{ $route->id }}"
-                        @if(old('route_id') == $route->id) selected @endif>
-                    {{ $route->name }}
-                </option>
-            @endforeach
-        </select>
+                <div class="card-header bg-success text-white">
+                    <h4 class="mb-0">Добавление рейса</h4>
+                </div>
 
-        @error('route_id')
-        <div class="error">{{ $message }}</div>
-        @enderror
+                <div class="card-body">
+
+                    <form method="POST" action="{{ url('/trips') }}">
+                        @csrf
+
+                        @include('trips._form')
+
+                        <button type="submit" class="btn btn-success">
+                            Добавить рейс
+                        </button>
+
+                        <a href="{{ url('/trips') }}"
+                           class="btn btn-secondary">
+                            Отмена
+                        </a>
+
+                    </form>
+
+                </div>
+            </div>
+
+        </div>
     </div>
 
-    <br>
-
-    <div>
-        <label>Транспорт:</label>
-
-        <select name="transport_id">
-            <option value="">-- Выберите транспорт --</option>
-
-            @foreach($transports as $transport)
-                <option value="{{ $transport->id }}"
-                        @if(old('transport_id') == $transport->id) selected @endif>
-                    {{ $transport->name }}
-                </option>
-            @endforeach
-        </select>
-
-        @error('transport_id')
-        <div class="error">{{ $message }}</div>
-        @enderror
-    </div>
-
-    <br>
-
-    <div>
-        <label>Дата и время отправления:</label>
-
-        <input
-            type="datetime-local"
-            name="departure_at"
-            value="{{ old('departure_at') }}"
-        >
-
-        @error('departure_at')
-        <div class="error">{{ $message }}</div>
-        @enderror
-    </div>
-
-    <br>
-
-    <div>
-        <label>Дата и время прибытия:</label>
-
-        <input
-            type="datetime-local"
-            name="arrival_at"
-            value="{{ old('arrival_at') }}"
-        >
-
-        @error('arrival_at')
-        <div class="error">{{ $message }}</div>
-        @enderror
-    </div>
-
-    <br>
-
-    <button type="submit">Добавить рейс</button>
-</form>
-
-<br>
-
-<a href="/trips">← Вернуться к списку рейсов</a>
-
-</body>
-</html>
+@endsection

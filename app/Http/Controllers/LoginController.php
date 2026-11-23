@@ -8,6 +8,15 @@ use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
 {
+    public function login()
+    {
+        if (Auth::check()) {
+            return redirect('/trips');
+        }
+
+        return view('login');
+    }
+
     public function authenticate(Request $request): RedirectResponse
     {
         $credentials = $request->validate([
@@ -18,19 +27,13 @@ class LoginController extends Controller
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
 
-            return redirect()->intended('login');
+            return redirect()->intended('/trips')
+                ->with('success', 'Вы успешно вошли в систему!');
         }
 
         return back()->withErrors([
-            'error' => 'The provided credentials do not match our records.',
+            'error' => 'Неверный e-mail или пароль.',
         ])->onlyInput('email');
-    }
-
-    public function login(Request $request)
-    {
-        return view('login', [
-            'user' => Auth::user()
-        ]);
     }
 
     public function logout(Request $request): RedirectResponse
@@ -40,6 +43,7 @@ class LoginController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect('login');
+        return redirect('/login')
+            ->with('success', 'Вы успешно вышли из системы!');
     }
 }
